@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SMSBackupRestore</string>
+    <string name="BackupLoc">Specify a Backup Location</string>
+    <string name="Backup">BackupSMS</string>
+    <string name="Restore">RestoreSMS</string>
+    <string name="menu_settings">Settings</string>
+    <string name="Messages">Messages</string>
+    <string name="RestoreMessages">Restore Messages</string>
+    <string name="BackUpMessages">BackUp Messages</string>
+
+</resources>
