@@ -70,14 +70,14 @@ public class SMSBackupRestoreActivity extends Activity{
             Toast.makeText(this, "SD card not usable", Toast.LENGTH_LONG).show();
             return;
         }
-        MessageStubs messages = new MessageStubs();
+        MessageSummaries messages = new MessageSummaries();
         int messageCount = 0;
         for(MessageType  messageType : MessageType.values()) {
             Uri uri = Uri.parse(messageType.getURI());
             Cursor messageCursor = getContentResolver().query(uri, fields, null, null, null);
             while(messageCursor.moveToNext()) {
                 messageCount++;
-                MessageStub messageStub = new MessageStub();
+                MessageSummary messageStub = new MessageSummary();
                 for(int i=0;i<messageCursor.getColumnCount();i++) {
                     String columnName = messageCursor.getColumnName(i);
                     messageStub.getColumnToValueMap().put(columnName, messageCursor.getString(i));
@@ -144,7 +144,7 @@ public class SMSBackupRestoreActivity extends Activity{
     }
 
 
-    private AlertDialog.Builder getBackupAlertDialog(MessageStubs messages) {
+    private AlertDialog.Builder getBackupAlertDialog(MessageSummaries messages) {
         String filePath = getFileNameForPersistence();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select a Name for Backup File");
@@ -219,11 +219,11 @@ public class SMSBackupRestoreActivity extends Activity{
 
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            MessageStubs messages = MessageStubs.deserializeMessages(this.files[choice.getChoiceIndex().intValue()]);
+            MessageSummaries messages = MessageSummaries.deserializeMessages(this.files[choice.getChoiceIndex().intValue()]);
             for(MessageType  messageType : messages.getMessageStubs().keySet()) {
                 Uri uri = Uri.parse(messageType.getURI());
                 ContentValues messageContent = new ContentValues();
-                for(MessageStub messageStub : messages.getMessageStubs(messageType)) {
+                for(MessageSummary messageStub : messages.getMessageStubs(messageType)) {
                     messageContent.clear();
                     for(String field : fields) {
                         messageContent.put(field,messageStub.getColumnToValueMap().get(field));
@@ -239,12 +239,12 @@ public class SMSBackupRestoreActivity extends Activity{
     }
 
     private  class BackupFileSelectListener implements DialogInterface.OnClickListener {
-        private MessageStubs messages;
+        private MessageSummaries messages;
         private EditText editText;
         private Activity activity;
 
 
-        public BackupFileSelectListener(MessageStubs messages, EditText editText, Activity activity) {
+        public BackupFileSelectListener(MessageSummaries messages, EditText editText, Activity activity) {
             this.messages = messages;
             this.editText = editText;
             this.activity = activity;
@@ -292,19 +292,19 @@ public class SMSBackupRestoreActivity extends Activity{
 
 
     private void backupListenerHelper(DialogInterface dialog,
-            String fileName, MessageStubs messages) {
-        MessageStubs.serializeMessages(messages, fileName.toString());
+            String fileName, MessageSummaries messages) {
+        MessageSummaries.serializeMessages(messages, fileName.toString());
         Toast.makeText(getApplicationContext(), "Messages Backed up in: "+fileName, Toast.LENGTH_LONG).show();
         dialog.dismiss();
     }
 
 
     private  class AlertListener implements DialogInterface.OnClickListener {
-        private MessageStubs messages;
+        private MessageSummaries messages;
         private String fileName;
 
 
-        public AlertListener(MessageStubs messages, String fileName) {
+        public AlertListener(MessageSummaries messages, String fileName) {
             this.messages = messages;
             this.fileName = fileName;
         }

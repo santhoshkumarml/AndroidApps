@@ -13,29 +13,29 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MessageStubs implements Serializable {
+public class MessageSummaries implements Serializable {
 
     private static final long serialVersionUID = -7225549992045380647L;
 
-    Map<MessageType,List<MessageStub>> messageStubs= null;
+    Map<MessageType,List<MessageSummary>> messageStubs= null;
 
-    public Map<MessageType,List<MessageStub>> getMessageStubs() {
+    public Map<MessageType,List<MessageSummary>> getMessageStubs() {
         if(messageStubs == null) {
-            this.messageStubs =  new HashMap<MessageType, List<MessageStub>>();
+            this.messageStubs =  new HashMap<MessageType, List<MessageSummary>>();
         }
         return messageStubs;
     }
 
-    public List<MessageStub>  getMessageStubs(MessageType type) {
-        List<MessageStub> messageStubs = getMessageStubs().get(type);
+    public List<MessageSummary>  getMessageStubs(MessageType type) {
+        List<MessageSummary> messageStubs = getMessageStubs().get(type);
         if(messageStubs == null) {
-            messageStubs = new ArrayList<MessageStub>();
+            messageStubs = new ArrayList<MessageSummary>();
         }
         getMessageStubs().put(type, messageStubs);
         return messageStubs;
     }
 
-    public static void serializeMessages(MessageStubs messages, String filePath) {
+    public static void serializeMessages(MessageSummaries messages, String filePath) {
         FileOutputStream fileOut = null;
         ObjectOutputStream out = null;
         try {
@@ -62,14 +62,14 @@ public class MessageStubs implements Serializable {
     }
 
 
-    public static MessageStubs deserializeMessages(File file) {
+    public static MessageSummaries deserializeMessages(File file) {
         FileInputStream fileIn = null;
         ObjectInputStream in = null;
-        MessageStubs messages = new MessageStubs();
+        MessageSummaries messages = new MessageSummaries();
         try {
             fileIn = new FileInputStream(file);
             in = new ObjectInputStream(fileIn);
-            messages = (MessageStubs) in.readObject();
+            messages = (MessageSummaries) in.readObject();
             SMSBackupRestoreActivity.LOGGER.info("Messages DeSerialized from file:"+file.getAbsolutePath());
         } catch (IOException e) {
             SMSBackupRestoreActivity.LOGGER.severe(e.getMessage());
