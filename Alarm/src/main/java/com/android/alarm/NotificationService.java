@@ -29,6 +29,7 @@ public class NotificationService extends Service{
     private NotificationManager nm;
     private Timer timer = new Timer();
     private TimerTask  task = null;
+    private static int notificationId = 0;
 
     //location update members
     private LocationManager lm;
@@ -74,22 +75,39 @@ public class NotificationService extends Service{
      */
     private void showNotification(CharSequence text) {
 
-
-        // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.ic_stat_name, text,
-                System.currentTimeMillis());
-
-        // The PendingIntent to launch our activity if the user selects this notification
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, AlarmActivity.class), 0);
 
+    	Notification.Builder builder = new Notification.Builder(this);
+
+        builder.setAutoCancel(false);
+//        builder.setTicker("this is ticker text");
+        builder.setContentTitle("Notification");               
+        builder.setContentText(text);
+        builder.setSmallIcon(R.drawable.ic_stat_name);
+        builder.setContentIntent(contentIntent);
+        builder.setOngoing(true);
+        builder.setSubText("This is subtext...");
+        builder.setNumber(100);
+        builder.build();
+
+        Notification notication = builder.getNotification();
+        this.nm.notify(++notificationId, notication);
+        // Set the icon, scrolling text and timestamp
+//        Notification notification = new Notification(R.drawable.ic_stat_name, text,
+//                System.currentTimeMillis());
+
+        // The PendingIntent to launch our activity if the user selects this notification
+//        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+//                new Intent(this, AlarmActivity.class), 0);
+
         // Set the info for the views that show in the notification panel.
-        notification.setLatestEventInfo(this, getText(R.string.service_label),
-                text, contentIntent);
+//        notification.setLatestEventInfo(this, getText(R.string.service_label),
+//                text, contentIntent);
 
         // Send the notification.
         // We use a layout id because it is a unique number.  We use it later to cancel.
-        nm.notify(R.string.service_started, notification);
+//        nm.notify(R.string.service_started, notification);
     }
 
     private void startLocationUpdates() {

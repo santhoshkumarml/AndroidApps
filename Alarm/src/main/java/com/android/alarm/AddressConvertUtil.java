@@ -5,10 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+
 public class AddressConvertUtil {
 	private static final Logger LOGGER = Logger.getLogger(AddressConvertUtil.class.getCanonicalName());
 
-	public static List<String> convertLocationToAddress(Contex context, Location location) {
+	public static List<String> convertLocationToAddress(Context context, Location location) {
         List<String> addresses = new ArrayList<String>();
         Geocoder geocoder = new Geocoder(context);
         try {
