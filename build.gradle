@@ -1,0 +1,3 @@
+allprojects {
+    task hello << { task -> println "Building $task.project.name" }
+}
