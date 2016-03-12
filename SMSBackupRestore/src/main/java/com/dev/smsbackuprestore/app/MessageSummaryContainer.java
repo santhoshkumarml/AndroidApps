@@ -13,29 +13,26 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MessageSummaries implements Serializable {
+public class MessageSummaryContainer implements Serializable {
 
     private static final long serialVersionUID = -7225549992045380647L;
 
-    Map<MessageType,List<MessageSummary>> messageStubs= null;
+    Map<MessageType,List<MessageSummary>> messageTypeToSummaryMap = new HashMap<MessageType, List<MessageSummary>>();
 
-    public Map<MessageType,List<MessageSummary>> getMessageStubs() {
-        if(messageStubs == null) {
-            this.messageStubs =  new HashMap<MessageType, List<MessageSummary>>();
-        }
-        return messageStubs;
+    public Map<MessageType,List<MessageSummary>> getMessageTypeToSummaryMap() {
+        return messageTypeToSummaryMap;
     }
 
     public List<MessageSummary>  getMessageStubs(MessageType type) {
-        List<MessageSummary> messageStubs = getMessageStubs().get(type);
-        if(messageStubs == null) {
-            messageStubs = new ArrayList<MessageSummary>();
+        List<MessageSummary> messageSummaries = getMessageTypeToSummaryMap().get(type);
+        if(messageSummaries == null) {
+            messageSummaries = new ArrayList<MessageSummary>();
         }
-        getMessageStubs().put(type, messageStubs);
-        return messageStubs;
+        getMessageTypeToSummaryMap().put(type, messageSummaries);
+        return messageSummaries;
     }
 
-    public static void serializeMessages(MessageSummaries messages, String filePath) {
+    public static void serializeMessages(MessageSummaryContainer messages, String filePath) {
         FileOutputStream fileOut = null;
         ObjectOutputStream out = null;
         try {
@@ -62,14 +59,14 @@ public class MessageSummaries implements Serializable {
     }
 
 
-    public static MessageSummaries deserializeMessages(File file) {
+    public static MessageSummaryContainer deserializeMessages(File file) {
         FileInputStream fileIn = null;
         ObjectInputStream in = null;
-        MessageSummaries messages = new MessageSummaries();
+        MessageSummaryContainer messages = new MessageSummaryContainer();
         try {
             fileIn = new FileInputStream(file);
             in = new ObjectInputStream(fileIn);
-            messages = (MessageSummaries) in.readObject();
+            messages = (MessageSummaryContainer) in.readObject();
             SMSBackupRestoreActivity.LOGGER.info("Messages DeSerialized from file:"+file.getAbsolutePath());
         } catch (IOException e) {
             SMSBackupRestoreActivity.LOGGER.severe(e.getMessage());
