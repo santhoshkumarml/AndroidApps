@@ -1,11 +1,6 @@
 package com.dev.routefinder.app;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+import com.dev.routefinder.app.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,6 +8,12 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 import android.view.Menu;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class RouteFinderActivity extends Activity {
 
@@ -29,20 +30,51 @@ public class RouteFinderActivity extends Activity {
         return true;
     }
 
+    private static String getDataFromUrl(String url) {
+        String result = null;
+        try {
+            URL myurl=new URL(url);
+            HttpURLConnection urlConnection = (HttpURLConnection) myurl
+                .openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+            InputStream is=urlConnection.getInputStream();
+            if (is != null) {
+                StringBuilder sb = new StringBuilder();
+                String line;
+                try {
+                    BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(is));
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    reader.close();
+                } finally {
+                    is.close();
+                }
+                result = sb.toString();
+            }
+        }catch (Exception e){
+            result=null;
+        }
+        return result;
+    }
+
     public void getDirections(String loginUrl) {
         JSONObject jArray = null;
         String result = "";
         String s;
         String s1;
         String s2;
-        //directions.clear();
 
         try {
-            HttpGet request = new HttpGet(loginUrl);
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpResponse response = httpClient.execute(request);
-            HttpEntity entityResponse = response.getEntity();
-            result = EntityUtils.toString(entityResponse);
+          result = getDataFromUrl(loginUrl);
+//            HttpGet request = new HttpGet(loginUrl);
+//            HttpClient httpClient = new DefaultHttpClient();
+//            HttpResponse response = httpClient.execute(request);
+//            HttpEntity entityResponse = response.getEntity();
+//            result = EntityUtils.toString(entityResponse);
 
         } catch (Exception e) {
             Log.e("log_tag", "Error converting result " + e.toString());
@@ -77,6 +109,6 @@ public class RouteFinderActivity extends Activity {
             } catch (NullPointerException f) {
 
             }*/
-        }
-
     }
+
+}

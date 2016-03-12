@@ -17,7 +17,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
-import com.android.alarm.R;
 
 public class NotificationService extends Service{
 

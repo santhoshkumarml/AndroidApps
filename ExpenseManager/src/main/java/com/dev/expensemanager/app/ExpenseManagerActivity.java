@@ -3,7 +3,6 @@ package com.dev.expensemanager.app;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
-import com.devel.expensemanager.R;
 
 public class ExpenseManagerActivity extends Activity {
 
