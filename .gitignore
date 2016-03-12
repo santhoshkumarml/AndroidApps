@@ -218,4 +218,8 @@ pip-log.txt
 
 #Gradle
 .gradle/
+
+
+.idea/
 build/
+*.iml
