@@ -14,7 +14,7 @@ allprojects {
     repositories {
         jcenter()
     }
-    task hello << { task -> println "Building $task.project.name" }
+    task bld << { task -> println "Building $task.project.name" }
 }
 
 task clean(type: Delete) {
