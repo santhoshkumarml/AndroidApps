@@ -1,4 +1,4 @@
-package com.android.alarm;
+package com.dev.alarm.app;
 
 import java.util.logging.Logger;
 
@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import com.android.alarm.R;
+
 /**
  *
  * @author Santhosh Kumar M L

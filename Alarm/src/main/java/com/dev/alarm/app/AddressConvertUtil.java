@@ -1,4 +1,4 @@
-package com.android.alarm;
+package com.dev.alarm.app;
 
 import java.io.IOException;
 import java.util.ArrayList;

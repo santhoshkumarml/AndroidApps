@@ -1,4 +1,4 @@
-package com.android.alarm;
+package com.dev.alarm.app;
 
 import java.util.Calendar;
 import java.util.Timer;
@@ -17,6 +17,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
+import com.android.alarm.R;
 
 public class NotificationService extends Service{
 
