@@ -1,8 +1,4 @@
-package com.devel.smsbackuprestore;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.util.logging.Logger;
+package com.dev.smsbackuprestore.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,6 +16,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.util.logging.Logger;
+
 public class SMSBackupRestoreActivity extends Activity{
 
     public final static Logger LOGGER = Logger.getLogger(SMSBackupRestoreActivity.class.getCanonicalName());
@@ -29,8 +29,6 @@ public class SMSBackupRestoreActivity extends Activity{
     private static final String[] fields = {"address","body","read","date"};
     private static String SDCARD_PATH = null;
     private SDCardStateChecker sdcardStateChecker = null;
-
-
 
 
     @Override

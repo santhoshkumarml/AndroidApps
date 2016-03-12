@@ -1,4 +1,4 @@
-package com.devel.smsbackuprestore;
+package com.dev.smsbackuprestore.app;
 
 import java.io.File;
 import java.io.FileInputStream;

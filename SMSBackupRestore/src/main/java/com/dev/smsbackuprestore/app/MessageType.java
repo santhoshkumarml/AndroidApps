@@ -1,4 +1,4 @@
-package com.devel.smsbackuprestore;
+package com.dev.smsbackuprestore.app;
 
 public enum MessageType {
 
