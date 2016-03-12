@@ -1,10 +1,5 @@
 package com.dev.alarm.app;
 
-import java.util.Calendar;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.Logger;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -17,6 +12,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
+
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Logger;
 
 public class NotificationService extends Service{
 

@@ -1,13 +1,11 @@
 package com.dev.routefinder.app;
 
-import com.dev.routefinder.app.R;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
