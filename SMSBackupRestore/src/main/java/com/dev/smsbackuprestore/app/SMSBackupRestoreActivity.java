@@ -20,6 +20,9 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.logging.Logger;
 
+/**
+ * @author Santhosh Kumar
+ */
 public class SMSBackupRestoreActivity extends Activity{
 
     public final static Logger LOGGER = Logger.getLogger(SMSBackupRestoreActivity.class.getCanonicalName());

@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 
+/**
+ * @author Santhosh Kumar
+ */
 public class ExpenseManagerActivity extends Activity {
 
 	@Override

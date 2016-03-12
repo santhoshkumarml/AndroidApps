@@ -10,9 +10,7 @@ import android.widget.Button;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Santhosh Kumar M L
- *
+ * @author Santhosh Kumar
  */
 public class AlarmActivity extends Activity {
 

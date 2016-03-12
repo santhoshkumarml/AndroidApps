@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/**
+ * @author Santhosh Kumar
+ */
 public class RideCheapActivity extends Activity {
 
   @Override
