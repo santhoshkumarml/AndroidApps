@@ -23,7 +23,7 @@ subprojects {
 
     android {
         compileSdkVersion 23
-        buildToolsVersion "24 rc3"
+        buildToolsVersion "23.0.3"
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_6
             targetCompatibility JavaVersion.VERSION_1_6
