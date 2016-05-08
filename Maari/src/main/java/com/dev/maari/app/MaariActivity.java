@@ -3,6 +3,7 @@ package com.dev.maari.app;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import com.dev.maari.util.Utility;
 
 /**
  * @author Santhosh Kumar
@@ -21,5 +22,4 @@ public class MaariActivity extends Activity {
     getMenuInflater().inflate(R.menu.maari, menu);
     return true;
   }
-
 }

@@ -79,7 +79,7 @@ public class ActorPeriodInfo implements Serializable{
     OWNER
   }
 
-  public class AuthInfo implements Serializable {
+  private class AuthInfo implements Serializable {
     private String userName;
     private String password;
 
@@ -133,5 +133,4 @@ public class ActorPeriodInfo implements Serializable{
       aP.setWeekday(Weekday.valueOf((String)val));
     }
   }
-
 }

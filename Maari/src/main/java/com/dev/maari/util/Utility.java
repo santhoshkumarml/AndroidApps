@@ -1,5 +1,6 @@
 package com.dev.maari.util;
 
+import android.app.PendingIntent;
 import android.telephony.SmsManager;
 import au.com.bytecode.opencsv.CSVReader;
 import com.dev.maari.model.ActorPeriodInfo;
@@ -50,6 +51,7 @@ public final class Utility {
   }
 
   private static Reader getReaderForDriveFile(String csvFileName) {
+    //TODO
     return null;
   }
 
@@ -65,9 +67,9 @@ public final class Utility {
     return readData(ADMIN_CSV_FILE, ActorPeriodInfo.ActorType.ADMIN);
   }
 
-  private void sendSMS(String phoneNumber, String message) {
+  public static void sendSMS(ActorPeriodInfo actorPeriodInfo, PendingIntent si, PendingIntent di) {
+    String message = "";
     SmsManager sms = SmsManager.getDefault();
-    sms.sendTextMessage(phoneNumber, null, message, null, null);
+    sms.sendTextMessage(actorPeriodInfo.getActorInfo().getPhoneNo(), null, message, si, di);
   }
-
 }
