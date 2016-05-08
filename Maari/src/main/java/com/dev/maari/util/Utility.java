@@ -3,12 +3,13 @@ package com.dev.maari.util;
 import android.app.PendingIntent;
 import android.telephony.SmsManager;
 import au.com.bytecode.opencsv.CSVReader;
+import com.dev.maari.model.ActorInfo;
 import com.dev.maari.model.ActorPeriodInfo;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public final class Utility {
@@ -20,13 +21,27 @@ public final class Utility {
 
   private Utility() {}
 
-  private static Set<ActorPeriodInfo> readData(String csvFile, ActorPeriodInfo.ActorType actorType) {
-    Set<ActorPeriodInfo> actorPeriodInfos = new HashSet<ActorPeriodInfo>();
+  private static Map<String, ActorPeriodInfo> readData(String csvFile, ActorInfo.ActorType actorType) {
+    Map<String, ActorPeriodInfo> actorPeriodInfos = new HashMap<String, ActorPeriodInfo>();
     CSVReader reader = null;
     try {
       reader = new CSVReader(getReaderForDriveFile(csvFile), DELIMITER);
+
       // these should be the header fields
+      int idPosition = -1;
       String[] header = reader.readNext();
+      for (int i = 0; i< header.length; i++) {
+        if (header[i].equalsIgnoreCase("id")) {
+          idPosition = i;
+          break;
+        }
+      }
+
+      if (idPosition == -1) {
+        LOG.warning("No id row present");
+        throw new RuntimeException("Cannot find id row");
+      }
+
       String[] fields;
       while ((fields = reader.readNext()) != null) {
         ActorPeriodInfo aP = new ActorPeriodInfo();
@@ -34,7 +49,7 @@ public final class Utility {
           ActorPeriodInfo.set(aP, header[i], fields[i]);
         }
         aP.getActorInfo().setActorType(actorType);
-        actorPeriodInfos.add(aP);
+        actorPeriodInfos.put(fields[idPosition], aP);
       }
     } catch (IOException  e) {
       LOG.severe(e.getLocalizedMessage());
@@ -55,16 +70,12 @@ public final class Utility {
     return null;
   }
 
-  public static Set<ActorPeriodInfo> readAgentData() {
-    return readData(AGENT_CSV_FILE, ActorPeriodInfo.ActorType.AGENT);
-  }
-
-  public static Set<ActorPeriodInfo> readOwnerData() {
-    return readData(OWNER_CSV_FILE, ActorPeriodInfo.ActorType.OWNER);
-  }
-
-  public static Set<ActorPeriodInfo> readAdminData() {
-    return readData(ADMIN_CSV_FILE, ActorPeriodInfo.ActorType.ADMIN);
+  public static Map<ActorInfo.ActorType, Map<String, ActorPeriodInfo>> initializeAndReadData() {
+    Map<ActorInfo.ActorType, Map<String, ActorPeriodInfo>> actorInfos = new HashMap<ActorInfo.ActorType, Map<String, ActorPeriodInfo>>();
+    actorInfos.put(ActorInfo.ActorType.ADMIN, readData(ADMIN_CSV_FILE, ActorInfo.ActorType.ADMIN));
+    actorInfos.put(ActorInfo.ActorType.AGENT, readData(AGENT_CSV_FILE, ActorInfo.ActorType.AGENT));
+    actorInfos.put(ActorInfo.ActorType.OWNER, readData(OWNER_CSV_FILE, ActorInfo.ActorType.OWNER));
+    return actorInfos;
   }
 
   public static void sendSMS(ActorPeriodInfo actorPeriodInfo, PendingIntent si, PendingIntent di) {

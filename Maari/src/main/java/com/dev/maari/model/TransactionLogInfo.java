@@ -28,18 +28,18 @@ import java.sql.Time;
 @DatabaseTable(tableName = "AgentTransactionLog")
 public class TransactionLogInfo implements Serializable{
   @DatabaseField(id = true)
-  String transactionLogId;
+  long transactionLogId;
 
   @DatabaseField
   long amount;
 
   @DatabaseField
-  ActorPeriodInfo ownerInfo;
+  String actorId;
 
   @DatabaseField
   Time time;
 
-  public String getTransactionLogId() {
+  public long getTransactionLogId() {
     return transactionLogId;
   }
 
@@ -47,8 +47,8 @@ public class TransactionLogInfo implements Serializable{
     return amount;
   }
 
-  public ActorPeriodInfo getOwnerInfo() {
-    return ownerInfo;
+  public String getActorId() {
+    return actorId;
   }
 
   public Time getTime() {
