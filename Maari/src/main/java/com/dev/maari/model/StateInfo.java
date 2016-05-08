@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dev.maari.app;
+package com.dev.maari.model;
 
 import com.dev.maari.model.ActorInfo;
 import com.dev.maari.model.ActorPeriodInfo;

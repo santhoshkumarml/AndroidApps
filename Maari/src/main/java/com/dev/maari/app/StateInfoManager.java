@@ -19,6 +19,7 @@
  */
 package com.dev.maari.app;
 
+import com.dev.maari.model.StateInfo;
 import com.dev.maari.util.SmsSenderBackendRunnable;
 
 import java.util.concurrent.Executors;
