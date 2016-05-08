@@ -21,6 +21,7 @@ package com.dev.maari.util;
 
 import android.app.PendingIntent;
 import com.dev.maari.app.StateInfoManager;
+import com.dev.maari.model.ActorInfo;
 import com.dev.maari.model.TransactionLogInfo;
 
 public class SmsSenderBackendRunnable implements Runnable {
@@ -38,7 +39,14 @@ public class SmsSenderBackendRunnable implements Runnable {
   public void run() {
     while(!stop){
       TransactionLogInfo logInfo = this.stateInfoManager.getStateInfo().getTransactionLogInfoQueue().poll();
-      Utility.sendSMS(logInfo.getOwnerInfo(), si, di);
+      Utility.sendSMS(
+          this.stateInfoManager.getStateInfo().getActorInfo(
+              ActorInfo.ActorType.OWNER,
+              logInfo.getActorId()
+          ),
+          si,
+          di
+      );
     }
   }
 

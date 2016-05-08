@@ -28,7 +28,7 @@ import java.sql.Time;
 @DatabaseTable(tableName = "AgentTransactionLog")
 public class TransactionLogInfo implements Serializable{
   @DatabaseField(id = true)
-  long transactionLogId;
+  long transactionLogId=0;
 
   @DatabaseField
   long amount;

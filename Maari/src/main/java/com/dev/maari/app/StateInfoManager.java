@@ -19,8 +19,9 @@
  */
 package com.dev.maari.app;
 
+import com.dev.maari.model.ActorInfo;
+import com.dev.maari.model.ActorPeriodInfo;
 import com.dev.maari.util.SmsSenderBackendRunnable;
-import com.dev.maari.util.Utility;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -33,9 +34,11 @@ public class StateInfoManager {
   public StateInfo getStateInfo() {
     return this.stateInfo;
   }
+
   public void initialize() {
     this.stateInfo = new StateInfo();
-    this.smsSender = new SmsSenderBackendRunnable(this, null, null);
+    this.stateInfo.loadState();
+    this.smsSender = new SmsSenderBackendRunnable(this.getStateInfo(), null, null);
     this.ex = Executors.newSingleThreadScheduledExecutor();
   }
 
