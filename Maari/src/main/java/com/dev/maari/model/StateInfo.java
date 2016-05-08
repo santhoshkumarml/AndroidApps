@@ -19,9 +19,6 @@
  */
 package com.dev.maari.model;
 
-import com.dev.maari.model.ActorInfo;
-import com.dev.maari.model.ActorPeriodInfo;
-import com.dev.maari.model.TransactionLogInfo;
 import com.dev.maari.util.Utility;
 
 import java.util.Map;
@@ -36,7 +33,7 @@ public class StateInfo {
   }
 
   public void loadState() {
-    actorPeriodInfoMap = Utility.initializeAndReadData();
+    this.actorPeriodInfoMap = Utility.initializeAndReadData();
     //TODO: add initialization for loading transactionLog;
     //transactionLogInfoQueue
   }

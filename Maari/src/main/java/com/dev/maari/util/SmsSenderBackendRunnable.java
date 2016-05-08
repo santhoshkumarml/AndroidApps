@@ -25,9 +25,9 @@ import com.dev.maari.model.ActorInfo;
 import com.dev.maari.model.TransactionLogInfo;
 
 public class SmsSenderBackendRunnable implements Runnable {
-  private PendingIntent si, di;
+  private final PendingIntent si, di;
+  private final StateInfoManager stateInfoManager;
   private volatile boolean stop;
-  private StateInfoManager stateInfoManager;
 
   public SmsSenderBackendRunnable(StateInfoManager stateInfoManager, PendingIntent si, PendingIntent di) {
     this.stateInfoManager = stateInfoManager;
