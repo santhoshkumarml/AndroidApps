@@ -17,42 +17,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dev.maari.model;
+package com.dev.maari.app;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import com.dev.maari.util.SmsSenderBackendRunnable;
 
-import java.io.Serializable;
-import java.sql.Time;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
-@DatabaseTable(tableName = "AgentTransactionLog")
-public class TransactionLogInfo implements Serializable{
-  @DatabaseField(id = true)
-  String transactionLogId;
+public class StateInfoManager {
+  SmsSenderBackendRunnable smsSender;
+  ScheduledExecutorService ex;
+  StateInfo stateInfo;
 
-  @DatabaseField
-  long amount;
-
-  @DatabaseField
-  ActorPeriodInfo ownerInfo;
-
-  @DatabaseField
-  Time time;
-
-  public String getTransactionLogId() {
-    return transactionLogId;
+  public StateInfo getStateInfo() {
+    return this.stateInfo;
+  }
+  public void initialize() {
+    this.stateInfo = new StateInfo();
+    this.smsSender = new SmsSenderBackendRunnable(this, null, null);
+    this.ex = Executors.newSingleThreadScheduledExecutor();
   }
 
-  public long getAmount() {
-    return amount;
+  public void destroy() {
+    this.smsSender.stop();
+    this.ex.shutdown();
   }
-
-  public ActorPeriodInfo getOwnerInfo() {
-    return ownerInfo;
-  }
-
-  public Time getTime() {
-    return time;
-  }
-
 }

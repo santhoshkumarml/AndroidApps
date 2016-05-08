@@ -17,42 +17,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dev.maari.model;
+package com.dev.maari.util;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import android.app.PendingIntent;
+import com.dev.maari.app.StateInfoManager;
+import com.dev.maari.model.TransactionLogInfo;
 
-import java.io.Serializable;
-import java.sql.Time;
+public class SmsSenderBackendRunnable implements Runnable {
+  private PendingIntent si, di;
+  private volatile boolean stop;
+  private StateInfoManager stateInfoManager;
 
-@DatabaseTable(tableName = "AgentTransactionLog")
-public class TransactionLogInfo implements Serializable{
-  @DatabaseField(id = true)
-  String transactionLogId;
-
-  @DatabaseField
-  long amount;
-
-  @DatabaseField
-  ActorPeriodInfo ownerInfo;
-
-  @DatabaseField
-  Time time;
-
-  public String getTransactionLogId() {
-    return transactionLogId;
+  public SmsSenderBackendRunnable(StateInfoManager stateInfoManager, PendingIntent si, PendingIntent di) {
+    this.stateInfoManager = stateInfoManager;
+    this.si = si;
+    this.di = di;
   }
 
-  public long getAmount() {
-    return amount;
+  @Override
+  public void run() {
+    while(!stop){
+      TransactionLogInfo logInfo = this.stateInfoManager.getStateInfo().getTransactionLogInfoQueue().poll();
+      Utility.sendSMS(logInfo.getOwnerInfo(), si, di);
+    }
   }
 
-  public ActorPeriodInfo getOwnerInfo() {
-    return ownerInfo;
+  public void stop() {
+    this.stop = true;
   }
-
-  public Time getTime() {
-    return time;
-  }
-
 }
