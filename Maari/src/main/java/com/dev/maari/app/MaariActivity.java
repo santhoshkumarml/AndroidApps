@@ -16,9 +16,9 @@ public class MaariActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_maari);
-    this.stateInfoManager = new StateInfoManager();
+    stateInfoManager = new StateInfoManager();
     try {
-      this.stateInfoManager.initialize(getApplicationContext());
+      stateInfoManager.initialize(getApplicationContext());
     } catch (MaariException e) {
       throw new RuntimeException(e);
     }
@@ -33,7 +33,7 @@ public class MaariActivity extends Activity {
 
   @Override
   protected void onDestroy() {
-    this.stateInfoManager.destroy();
+    stateInfoManager.destroy();
     super.onDestroy();
   }
 }

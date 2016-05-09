@@ -17,23 +17,23 @@ public class StateInfoManager {
   DAOManager daoManager;
 
   public StateInfo getStateInfo() {
-    return this.stateInfo;
+    return stateInfo;
   }
 
   public void initialize(Context context) throws MaariException{
-    this.stateInfo = new StateInfo();
-    this.daoManager = new DAOManager(context);
+    stateInfo = new StateInfo();
+    daoManager = new DAOManager(context);
     try {
-      this.stateInfo.loadState(this.daoManager.getTransactionLogDao());
+      stateInfo.loadState(this.daoManager.getTransactionLogDao());
     } catch (SQLException e) {
       throw new MaariException(e);
     }
-    this.smsSender = new SmsSender(this, null, null);
-    this.ex = Executors.newSingleThreadScheduledExecutor();
+    smsSender = new SmsSender(this, null, null);
+    ex = Executors.newSingleThreadScheduledExecutor();
   }
 
   public void destroy() {
-    this.smsSender.stop();
-    this.ex.shutdown();
+    smsSender.stop();
+    ex.shutdown();
   }
 }

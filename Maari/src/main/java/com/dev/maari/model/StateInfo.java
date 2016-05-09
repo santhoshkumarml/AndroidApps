@@ -23,7 +23,7 @@ public class StateInfo {
   }
 
   public ActorPeriodInfo getOwnerInfo(String actorId) {
-    return (ActorPeriodInfo)(actorInfoMap.get(ActorInfo.ActorType.AGENT).get(actorId));
+    return (ActorPeriodInfo)(actorInfoMap.get(ActorInfo.ActorType.OWNER).get(actorId));
   }
 
   public ActorInfo getAgentInfo(String actorId) {
