@@ -14,7 +14,7 @@ public class StateInfo {
     return this.transactionLogInfoQueue;
   }
 
-  public void loadState(Dao<TransactionLogInfo, Long> transactionLogDao) {
+  public void loadState(Dao<TransactionLogInfo, Long> transactionLogDao) throws MaariException{
     this.actorPeriodInfoMap = Utility.initializeAndReadData();
     //Load all rows from the SQL.
     for (TransactionLogInfo logInfo : transactionLogDao) {

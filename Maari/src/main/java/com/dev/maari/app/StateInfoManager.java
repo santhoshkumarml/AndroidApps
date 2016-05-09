@@ -26,7 +26,7 @@ public class StateInfoManager {
     try {
       this.stateInfo.loadState(this.daoManager.getTransactionLogDao());
     } catch (SQLException e) {
-      throw new MaariException(e.getMessage());
+      throw new MaariException(e);
     }
     this.smsSender = new SmsSender(this, null, null);
     this.ex = Executors.newSingleThreadScheduledExecutor();
