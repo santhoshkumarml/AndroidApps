@@ -2,7 +2,9 @@ package com.dev.maari.app;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import com.dev.maari.model.MaariException;
 
 /**
  * @author Santhosh Kumar
@@ -15,7 +17,12 @@ public class MaariActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_maari);
     this.stateInfoManager = new StateInfoManager();
-    this.stateInfoManager.initialize();
+    try {
+      this.stateInfoManager.initialize(getApplicationContext());
+    } catch (MaariException e) {
+      Log.e(MaariActivity.class.getCanonicalName(), e.getMessage());
+      throw new RuntimeException(e);
+    }
   }
 
   @Override

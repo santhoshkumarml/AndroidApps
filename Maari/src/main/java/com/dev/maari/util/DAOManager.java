@@ -21,6 +21,7 @@ package com.dev.maari.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import com.dev.maari.model.MaariException;
 import com.dev.maari.model.TransactionLogInfo;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -47,6 +48,7 @@ public class DAOManager extends OrmLiteSqliteOpenHelper{
       TableUtils.createTableIfNotExists(connectionSource, TransactionLogInfo.class);
     } catch (SQLException e) {
       Log.e(LOG_NAME, "Could not create new table for Thing", e);
+      throw new RuntimeException(e.getMessage());
     }
   }
 

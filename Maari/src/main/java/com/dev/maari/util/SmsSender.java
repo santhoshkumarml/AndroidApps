@@ -5,12 +5,12 @@ import com.dev.maari.app.StateInfoManager;
 import com.dev.maari.model.ActorInfo;
 import com.dev.maari.model.TransactionLogInfo;
 
-public class SmsSenderBackendRunnable implements Runnable {
+public class SmsSender implements Runnable {
   private final PendingIntent si, di;
   private final StateInfoManager stateInfoManager;
   private volatile boolean stop;
 
-  public SmsSenderBackendRunnable(StateInfoManager stateInfoManager, PendingIntent si, PendingIntent di) {
+  public SmsSender(StateInfoManager stateInfoManager, PendingIntent si, PendingIntent di) {
     this.stateInfoManager = stateInfoManager;
     this.si = si;
     this.di = di;
