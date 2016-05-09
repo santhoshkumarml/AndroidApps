@@ -11,6 +11,7 @@ import com.dev.maari.model.TransactionLogInfo;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,8 +91,23 @@ public final class Utility {
     }
   }
 
-  private static Reader getReaderForDriveFile(String csvFileName) {
-    //TODO
+  private static void accessPubliclySharedFolderUrl() throws GeneralSecurityException{
+//    Drive drive = new Drive.Builder(
+//        new NetHttpTransport.Builder()
+//            .doNotValidateCertificate()
+//            .build(),
+//        JacksonFactory.getDefaultInstance(),
+//        null
+//    ).setApplicationName("Maari")
+//        .setRootUrl("https://drive.google.com/folderview?id=0B9heMWveip8qRnlNcTZoekVQLVE&usp=sharing")
+//        .build();
+  }
+  private static Reader getReaderForDriveFile(String folderUrl) {
+    try {
+
+    } catch (Exception e) {
+
+    }
     return null;
   }
 

@@ -2,7 +2,6 @@ package com.dev.maari.app;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import com.dev.maari.model.MaariException;
 
@@ -10,15 +9,15 @@ import com.dev.maari.model.MaariException;
  * @author Santhosh Kumar
  */
 public class MaariActivity extends Activity {
-  StateInfoManager stateInfoManager;
+  AppStateManager appStateManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_maari);
-    stateInfoManager = new StateInfoManager();
+    appStateManager = new AppStateManager();
     try {
-      stateInfoManager.initialize(getApplicationContext());
+      appStateManager.initialize(getApplicationContext());
     } catch (MaariException e) {
       throw new RuntimeException(e);
     }
@@ -33,7 +32,7 @@ public class MaariActivity extends Activity {
 
   @Override
   protected void onDestroy() {
-    stateInfoManager.destroy();
+    appStateManager.destroy();
     super.onDestroy();
   }
 }

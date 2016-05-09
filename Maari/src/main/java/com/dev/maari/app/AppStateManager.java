@@ -9,15 +9,11 @@ import java.sql.SQLException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-public class StateInfoManager {
+public class AppStateManager {
   SmsSender smsSender;
   ScheduledExecutorService ex;
   StateInfo stateInfo;
   DAOManager daoManager;
-
-  public StateInfo getStateInfo() {
-    return stateInfo;
-  }
 
   public void initialize(Context context) throws MaariException{
     stateInfo = new StateInfo();
@@ -27,7 +23,7 @@ public class StateInfoManager {
     } catch (SQLException e) {
       throw new MaariException(e);
     }
-    smsSender = new SmsSender(this, null, null);
+    smsSender = new SmsSender(stateInfo, null, null);
     ex = Executors.newSingleThreadScheduledExecutor();
   }
 
