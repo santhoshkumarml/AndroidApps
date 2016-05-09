@@ -1,4 +1,4 @@
-package com.dev.maari.util;
+package com.dev.maari.app;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public class DAOManager extends OrmLiteSqliteOpenHelper{
   private static final String DATABASE_NAME = "maari.db";
   private static final int DATABASE_VERSION = 4;
-  private final String LOG_NAME = DAOManager.class.getCanonicalName();
+  private static final String LOG_NAME = DAOManager.class.getCanonicalName();
 
   private Dao<TransactionLogInfo, Long> thingDao;
 

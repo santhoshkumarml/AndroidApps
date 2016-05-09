@@ -3,7 +3,6 @@ package com.dev.maari.app;
 import android.content.Context;
 import com.dev.maari.model.MaariException;
 import com.dev.maari.model.StateInfo;
-import com.dev.maari.util.DAOManager;
 import com.dev.maari.util.SmsSender;
 
 import java.sql.SQLException;
