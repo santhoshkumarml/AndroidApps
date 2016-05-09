@@ -2,7 +2,6 @@ package com.dev.maari.util;
 
 import android.app.PendingIntent;
 import com.dev.maari.app.StateInfoManager;
-import com.dev.maari.model.ActorInfo;
 import com.dev.maari.model.TransactionLogInfo;
 
 public class SmsSender implements Runnable {
@@ -21,8 +20,13 @@ public class SmsSender implements Runnable {
     while(!stop){
       TransactionLogInfo logInfo = this.stateInfoManager.getStateInfo().getTransactionLogInfoQueue().poll();
       Utility.sendSMS(
-          this.stateInfoManager.getStateInfo().getActorInfo(
-              ActorInfo.ActorType.OWNER,
+          logInfo,
+          stateInfoManager.getStateInfo().getOwnerInfo(
+              logInfo.getActorId()
+          ),
+          stateInfoManager.getStateInfo().getAdminInfo(),
+          //TODO: get the current logged in agent.
+          stateInfoManager.getStateInfo().getAgentInfo(
               logInfo.getActorId()
           ),
           si,

@@ -7,6 +7,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.dev.maari.model.ActorInfo;
 import com.dev.maari.model.ActorPeriodInfo;
 import com.dev.maari.model.MaariException;
+import com.dev.maari.model.TransactionLogInfo;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -22,8 +23,8 @@ public final class Utility {
 
   private Utility() {}
 
-  private static Map<String, ActorPeriodInfo> readData(String csvFile, ActorInfo.ActorType actorType) throws MaariException{
-    Map<String, ActorPeriodInfo> actorPeriodInfos = new HashMap<String, ActorPeriodInfo>();
+  private static Map<String, ActorInfo> readData(String csvFile, ActorInfo.ActorType actorType) throws MaariException{
+    Map<String, ActorInfo> actorPeriodInfos = new HashMap<String, ActorInfo>();
     CSVReader reader = null;
     try {
       reader = new CSVReader(getReaderForDriveFile(csvFile), DELIMITER);
@@ -45,16 +46,17 @@ public final class Utility {
 
       String[] fields;
       while ((fields = reader.readNext()) != null) {
-        ActorPeriodInfo aP = new ActorPeriodInfo();
+        ActorInfo aP = actorType == ActorInfo.ActorType.OWNER? new ActorPeriodInfo(): new ActorInfo();
         for (int i = 0; i < header.length; i++) {
           if (header[i].equalsIgnoreCase("id")) {
             fields[i] = actorType.name() + "_" + fields[i];
           }
-          ActorPeriodInfo.set(aP, header[i], fields[i]);
+          populateActorInfo(aP, header[i], fields[i]);
         }
-        aP.getActorInfo().setActorType(actorType);
+        aP.setActorType(actorType);
         actorPeriodInfos.put(fields[idPosition], aP);
       }
+
     } catch (IOException  e) {
       Log.e(LOG_TAG, e.getLocalizedMessage());
       throw new MaariException(e);
@@ -70,22 +72,68 @@ public final class Utility {
     return actorPeriodInfos;
   }
 
+  public static void populateActorInfo(ActorInfo aP, String fieldName, Object val) {
+    if (fieldName.equalsIgnoreCase("name")) {
+      aP.setName((String) val);
+    } else if (fieldName.equalsIgnoreCase("phoneno")) {
+      aP.setPhoneNo((String)val);
+    } else if (fieldName.equalsIgnoreCase("emailid")) {
+      aP.setEmailId((String)val);
+    } else if (fieldName.equalsIgnoreCase("org")) {
+      aP.setOrg((String)val);
+    } else if (fieldName.equalsIgnoreCase("username")) {
+      aP.getAuthInfo().setUserName((String)val);
+    } else if (fieldName.equalsIgnoreCase("password")) {
+      aP.getAuthInfo().setPassword((String)val);
+    } else if (fieldName.equalsIgnoreCase("weekday")) {
+      ((ActorPeriodInfo)aP).setWeekday(ActorPeriodInfo.Weekday.valueOf((String)val));
+    }
+  }
+
   private static Reader getReaderForDriveFile(String csvFileName) {
     //TODO
     return null;
   }
 
-  public static Map<ActorInfo.ActorType, Map<String, ActorPeriodInfo>> initializeAndReadData() throws MaariException{
-    Map<ActorInfo.ActorType, Map<String, ActorPeriodInfo>> actorInfos = new HashMap<ActorInfo.ActorType, Map<String, ActorPeriodInfo>>();
+  public static Map<ActorInfo.ActorType, Map<String, ActorInfo>> initializeAndReadData() throws MaariException{
+    Map<ActorInfo.ActorType, Map<String, ActorInfo>> actorInfos =
+        new HashMap<ActorInfo.ActorType, Map<String, ActorInfo>>();
     actorInfos.put(ActorInfo.ActorType.ADMIN, readData(ADMIN_CSV_FILE, ActorInfo.ActorType.ADMIN));
     actorInfos.put(ActorInfo.ActorType.AGENT, readData(AGENT_CSV_FILE, ActorInfo.ActorType.AGENT));
     actorInfos.put(ActorInfo.ActorType.OWNER, readData(OWNER_CSV_FILE, ActorInfo.ActorType.OWNER));
     return actorInfos;
   }
 
-  public static void sendSMS(ActorPeriodInfo actorPeriodInfo, PendingIntent si, PendingIntent di) {
-    String message = "";
+  public static String constructMessage(
+      TransactionLogInfo logInfo,
+      ActorInfo ownerInfo,
+      ActorInfo adminInfo,
+      ActorInfo agentInfo
+  ) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Agent: ");
+    sb.append(agentInfo.getName());
+    sb.append(" received Sum of Rs.");
+    sb.append(logInfo.getAmount());
+    sb.append(" on behalf of Distributor: ");
+    sb.append(adminInfo.getName());
+    sb.append(" at ");
+    sb.append(logInfo.getTime().toString());
+    sb.append(" from ");
+    sb.append(ownerInfo.getName());
+    return sb.toString();
+  }
+
+  public static void sendSMS(
+      TransactionLogInfo logInfo,
+      ActorInfo ownerInfo,
+      ActorInfo adminInfo,
+      ActorInfo agentInfo,
+      PendingIntent si,
+      PendingIntent di
+  ) {
+    String message = constructMessage(logInfo, ownerInfo, adminInfo, agentInfo);
     SmsManager sms = SmsManager.getDefault();
-    sms.sendTextMessage(actorPeriodInfo.getActorInfo().getPhoneNo(), null, message, si, di);
+    sms.sendTextMessage(ownerInfo.getPhoneNo(), null, message, si, di);
   }
 }

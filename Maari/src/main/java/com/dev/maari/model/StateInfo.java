@@ -8,21 +8,29 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class StateInfo {
   private ConcurrentLinkedQueue<TransactionLogInfo> transactionLogInfoQueue = new ConcurrentLinkedQueue<TransactionLogInfo>();
-  private Map<ActorInfo.ActorType, Map<String, ActorPeriodInfo>> actorPeriodInfoMap;
+  private Map<ActorInfo.ActorType, Map<String, ActorInfo>> actorInfoMap;
 
   public ConcurrentLinkedQueue<TransactionLogInfo> getTransactionLogInfoQueue() {
     return this.transactionLogInfoQueue;
   }
 
   public void loadState(Dao<TransactionLogInfo, Long> transactionLogDao) throws MaariException{
-    this.actorPeriodInfoMap = Utility.initializeAndReadData();
+    this.actorInfoMap = Utility.initializeAndReadData();
     //Load all rows from the SQL.
     for (TransactionLogInfo logInfo : transactionLogDao) {
       transactionLogInfoQueue.offer(logInfo);
     }
   }
 
-  public ActorPeriodInfo getActorInfo(ActorInfo.ActorType type, String actorId) {
-    return this.actorPeriodInfoMap.get(type).get(actorId);
+  public ActorPeriodInfo getOwnerInfo(String actorId) {
+    return (ActorPeriodInfo)(actorInfoMap.get(ActorInfo.ActorType.AGENT).get(actorId));
+  }
+
+  public ActorInfo getAgentInfo(String actorId) {
+    return actorInfoMap.get(ActorInfo.ActorType.AGENT).get(actorId);
+  }
+
+  public ActorInfo getAdminInfo() {
+    return actorInfoMap.get(ActorInfo.ActorType.ADMIN).values().iterator().next();
   }
 }

@@ -20,7 +20,6 @@ public class MaariActivity extends Activity {
     try {
       this.stateInfoManager.initialize(getApplicationContext());
     } catch (MaariException e) {
-      Log.e(MaariActivity.class.getCanonicalName(), e.getMessage());
       throw new RuntimeException(e);
     }
   }
