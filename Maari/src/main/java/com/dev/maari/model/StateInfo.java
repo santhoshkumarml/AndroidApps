@@ -1,6 +1,7 @@
 package com.dev.maari.model;
 
 import com.dev.maari.util.Utility;
+import com.j256.ormlite.dao.Dao;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -13,10 +14,12 @@ public class StateInfo {
     return this.transactionLogInfoQueue;
   }
 
-  public void loadState() {
+  public void loadState(Dao<TransactionLogInfo, Long> transactionLogDao) {
     this.actorPeriodInfoMap = Utility.initializeAndReadData();
-    //TODO: add initialization for loading transactionLog;
-    //transactionLogInfoQueue
+    //Load all rows from the SQL.
+    for (TransactionLogInfo logInfo : transactionLogDao) {
+      transactionLogInfoQueue.offer(logInfo);
+    }
   }
 
   public ActorPeriodInfo getActorInfo(ActorInfo.ActorType type, String actorId) {

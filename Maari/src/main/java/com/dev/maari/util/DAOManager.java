@@ -30,14 +30,14 @@ import android.util.Log;
 
 import java.sql.SQLException;
 
-public class DBHelper extends OrmLiteSqliteOpenHelper{
+public class DAOManager extends OrmLiteSqliteOpenHelper{
   private static final String DATABASE_NAME = "maari.db";
   private static final int DATABASE_VERSION = 4;
-  private final String LOG_NAME = DBHelper.class.getCanonicalName();
+  private final String LOG_NAME = DAOManager.class.getCanonicalName();
 
   private Dao<TransactionLogInfo, Long> thingDao;
 
-  public DBHelper(Context context) {
+  public DAOManager(Context context) {
     super(context, DATABASE_NAME, null, DATABASE_VERSION);
   }
 
@@ -53,7 +53,8 @@ public class DBHelper extends OrmLiteSqliteOpenHelper{
   @Override
   public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int oldVersion,
                         int newVersion) {
-    //NOOP
+//    NOOP
+
 //    try {
 //      TableUtils.dropTable(connectionSource, TransactionLogInfo.class, true);
 //      onCreate(sqLiteDatabase, connectionSource);
