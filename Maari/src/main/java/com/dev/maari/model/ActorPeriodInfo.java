@@ -1,8 +1,6 @@
 package com.dev.maari.model;
 
-import java.io.Serializable;
-
-public class ActorPeriodInfo extends ActorInfo{
+public class ActorPeriodInfo extends ActorInfo {
   Weekday weekday = Weekday.SUNDAY;
 
   public enum Weekday {

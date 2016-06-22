@@ -6,7 +6,7 @@ import android.util.Log;
 import au.com.bytecode.opencsv.CSVReader;
 import com.dev.maari.model.ActorInfo;
 import com.dev.maari.model.ActorPeriodInfo;
-import com.dev.maari.model.MaariException;
+import com.dev.maari.exceptions.MaariException;
 import com.dev.maari.model.TransactionLogInfo;
 
 import java.io.IOException;
@@ -17,45 +17,42 @@ import java.util.Map;
 
 public final class Utility {
   private static final char DELIMITER = '\t';
-  private static final String OWNER_CSV_FILE = "owners.csv";
-  private static final String AGENT_CSV_FILE = "agents.csv";
-  private static final String ADMIN_CSV_FILE = "admin.csv";
+  private static final String MASTER_CSV_FILE = "master.csv";
   private static final String LOG_TAG = Utility.class.getCanonicalName();
 
   private Utility() {}
 
-  private static Map<String, ActorInfo> readData(String csvFile, ActorInfo.ActorType actorType) throws MaariException{
-    Map<String, ActorInfo> actorPeriodInfos = new HashMap<String, ActorInfo>();
+  private static Map<ActorInfo.ActorType, Map<String, ActorInfo>> readData(String csvFile) throws MaariException{
+    Map<ActorInfo.ActorType, Map<String, ActorInfo>> actorPeriodInfos =
+        new HashMap<ActorInfo.ActorType, Map<String, ActorInfo>>();
     CSVReader reader = null;
     try {
       reader = new CSVReader(getReaderForDriveFile(csvFile), DELIMITER);
 
       // these should be the header fields
-      int idPosition = -1;
-      String[] header = reader.readNext();
-      for (int i = 0; i< header.length; i++) {
-        if (header[i].equalsIgnoreCase("id")) {
-          idPosition = i;
-          break;
-        }
+      String[] headers = reader.readNext();
+      Map<String, Integer> headerNameToPosition = new HashMap<String, Integer>();
+      for (int i = 0; i< headers.length; i++) {
+        headerNameToPosition.put(headers[i], i);
       }
 
-      if (idPosition == -1) {
-        Log.w(LOG_TAG, "No id row present");
-        throw new RuntimeException("Cannot find id row");
+      if  (!(headerNameToPosition.containsKey("id") || headerNameToPosition.containsKey("type"))) {
+        Log.w(LOG_TAG, "No id/type row present");
+        throw new RuntimeException("Cannot find id/type row");
       }
 
       String[] fields;
       while ((fields = reader.readNext()) != null) {
-        ActorInfo aP = actorType == ActorInfo.ActorType.OWNER? new ActorPeriodInfo(): new ActorInfo();
-        for (int i = 0; i < header.length; i++) {
-          if (header[i].equalsIgnoreCase("id")) {
-            fields[i] = actorType.name() + "_" + fields[i];
-          }
-          populateActorInfo(aP, header[i], fields[i]);
+        ActorInfo aP = new ActorInfo();
+        for (int i = 0; i < headers.length; i++) {
+          populateActorInfo(aP, headers[i], fields[i]);
         }
-        aP.setActorType(actorType);
-        actorPeriodInfos.put(fields[idPosition], aP);
+        Map<String, ActorInfo> innerMap = actorPeriodInfos.get(aP.getActorType());
+        if (innerMap == null) {
+          innerMap = new HashMap<String, ActorInfo>();
+        }
+        innerMap.put(aP.getActorId(), aP);
+        actorPeriodInfos.put(aP.getActorType(), innerMap);
       }
 
     } catch (IOException  e) {
@@ -86,6 +83,8 @@ public final class Utility {
       aP.getAuthInfo().setUserName((String)val);
     } else if (fieldName.equalsIgnoreCase("password")) {
       aP.getAuthInfo().setPassword((String)val);
+    } else if (fieldName.equalsIgnoreCase("type")) {
+      aP.setActorType(ActorInfo.ActorType.valueOf(fieldName));
     } else if (fieldName.equalsIgnoreCase("weekday")) {
       ((ActorPeriodInfo)aP).setWeekday(ActorPeriodInfo.Weekday.valueOf((String)val));
     }
@@ -114,9 +113,7 @@ public final class Utility {
   public static Map<ActorInfo.ActorType, Map<String, ActorInfo>> initializeAndReadData() throws MaariException{
     Map<ActorInfo.ActorType, Map<String, ActorInfo>> actorInfos =
         new HashMap<ActorInfo.ActorType, Map<String, ActorInfo>>();
-    actorInfos.put(ActorInfo.ActorType.ADMIN, readData(ADMIN_CSV_FILE, ActorInfo.ActorType.ADMIN));
-    actorInfos.put(ActorInfo.ActorType.AGENT, readData(AGENT_CSV_FILE, ActorInfo.ActorType.AGENT));
-    actorInfos.put(ActorInfo.ActorType.OWNER, readData(OWNER_CSV_FILE, ActorInfo.ActorType.OWNER));
+    //TODO:actorInfos.put(ActorInfo.ActorType.OWNER, readData(A, ActorInfo.ActorType.OWNER));
     return actorInfos;
   }
 

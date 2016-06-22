@@ -1,4 +1,4 @@
-package com.dev.maari.model;
+package com.dev.maari.exceptions;
 
 public class MaariException extends Exception{
   public MaariException(String msg, Throwable e) {

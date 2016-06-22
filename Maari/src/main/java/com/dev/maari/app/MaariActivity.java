@@ -3,7 +3,7 @@ package com.dev.maari.app;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
-import com.dev.maari.model.MaariException;
+import com.dev.maari.exceptions.MaariException;
 
 /**
  * @author Santhosh Kumar
