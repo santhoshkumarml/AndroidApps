@@ -1,33 +1,77 @@
 package com.dev.maari.app;
 
 import android.content.Context;
+import android.util.Log;
 import com.dev.maari.exceptions.MaariException;
 import com.dev.maari.model.StateInfo;
+import com.dev.maari.model.TransactionLogInfo;
 import com.dev.maari.util.SmsSender;
+import com.dev.maari.util.TransactionLogInfoPollingHandler;
+import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AppStateManager {
-  SmsSender smsSender;
-  ScheduledExecutorService ex;
-  StateInfo stateInfo;
-  DAOManager daoManager;
+  private static final String LOG_TAG = AppStateManager.class.getCanonicalName();
+  private SmsSender smsSender;
+  private ScheduledExecutorService ex;
+  private Dao<TransactionLogInfo, Long> transactionLogDao;
+  private StateInfo stateInfo;
 
-  public void initialize(Context context) throws MaariException{
+  void initialize(Context context) throws MaariException {
     stateInfo = new StateInfo();
-    daoManager = new DAOManager(context);
+    DAOManager daoManager = new DAOManager(context);
     try {
-      stateInfo.loadState(this.daoManager.getTransactionLogDao());
+      transactionLogDao = daoManager.getTransactionLogDao();
     } catch (SQLException e) {
       throw new MaariException(e);
     }
-    smsSender = new SmsSender(stateInfo, null, null);
+    //TODO: Pending intent for sms
+    smsSender = new SmsSender(this, null, null);
     ex = Executors.newSingleThreadScheduledExecutor();
+    ex.scheduleAtFixedRate(smsSender, 10, 10, TimeUnit.SECONDS);
   }
 
-  public void destroy() {
+  public StateInfo getStateInfo() {
+    return stateInfo;
+  }
+
+  public void offerToTransactionLogQueue(TransactionLogInfo logInfo) throws MaariException {
+    try {
+      transactionLogDao.create(logInfo);
+    } catch (SQLException e) {
+      throw new MaariException(e);
+    }
+  }
+
+  public void pollTransactionLogInfoAndDoAction(TransactionLogInfoPollingHandler handler) throws MaariException {
+    TransactionLogInfo transactionLogInfo = null;
+    boolean isActionSuccess = false;
+    try {
+      Iterator<TransactionLogInfo> transactionLogInfoIterator = transactionLogDao.iterator();
+      if (transactionLogInfoIterator.hasNext()) {
+        transactionLogInfo = transactionLogInfoIterator.next();
+        isActionSuccess  = handler.handleTransactionLogPollingAction(transactionLogInfo);
+      }
+    } catch (Exception e) {
+      throw new MaariException(e);
+    } finally {
+      if (transactionLogInfo != null && isActionSuccess) {
+        try {
+          transactionLogDao.delete(Collections.singletonList(transactionLogInfo));
+        } catch (SQLException e) {
+          Log.w(LOG_TAG, e);
+        }
+      }
+    }
+  }
+
+  void destroy() {
     smsSender.stop();
     ex.shutdown();
   }

@@ -23,7 +23,7 @@ public final class Utility {
   private Utility() {}
 
   private static Map<ActorInfo.ActorType, Map<String, ActorInfo>> readData(String csvFile) throws MaariException{
-    Map<ActorInfo.ActorType, Map<String, ActorInfo>> actorPeriodInfos =
+    Map<ActorInfo.ActorType, Map<String, ActorInfo>> actorInfos =
         new HashMap<ActorInfo.ActorType, Map<String, ActorInfo>>();
     CSVReader reader = null;
     try {
@@ -43,16 +43,16 @@ public final class Utility {
 
       String[] fields;
       while ((fields = reader.readNext()) != null) {
-        ActorInfo aP = new ActorInfo();
+        ActorInfo actorInfo = new ActorInfo();
         for (int i = 0; i < headers.length; i++) {
-          populateActorInfo(aP, headers[i], fields[i]);
+          populateActorInfo(actorInfo, headers[i], fields[i]);
         }
-        Map<String, ActorInfo> innerMap = actorPeriodInfos.get(aP.getActorType());
+        Map<String, ActorInfo> innerMap = actorInfos.get(actorInfo.getActorType());
         if (innerMap == null) {
           innerMap = new HashMap<String, ActorInfo>();
         }
-        innerMap.put(aP.getActorId(), aP);
-        actorPeriodInfos.put(aP.getActorType(), innerMap);
+        innerMap.put(actorInfo.getActorId(), actorInfo);
+        actorInfos.put(actorInfo.getActorType(), innerMap);
       }
 
     } catch (IOException  e) {
@@ -67,11 +67,13 @@ public final class Utility {
         }
       }
     }
-    return actorPeriodInfos;
+    return actorInfos;
   }
 
-  public static void populateActorInfo(ActorInfo aP, String fieldName, Object val) {
-    if (fieldName.equalsIgnoreCase("name")) {
+  private static void populateActorInfo(ActorInfo aP, String fieldName, Object val) {
+    if (fieldName.equals("actorId") || fieldName.equals("id")) {
+      aP.setActorId((String)val);
+    } else if (fieldName.equalsIgnoreCase("name")) {
       aP.setName((String) val);
     } else if (fieldName.equalsIgnoreCase("phoneno")) {
       aP.setPhoneNo((String)val);
@@ -111,13 +113,12 @@ public final class Utility {
   }
 
   public static Map<ActorInfo.ActorType, Map<String, ActorInfo>> initializeAndReadData() throws MaariException{
-    Map<ActorInfo.ActorType, Map<String, ActorInfo>> actorInfos =
-        new HashMap<ActorInfo.ActorType, Map<String, ActorInfo>>();
+    Map<ActorInfo.ActorType, Map<String, ActorInfo>> actorInfos = new HashMap<ActorInfo.ActorType, Map<String, ActorInfo>>();
     //TODO:actorInfos.put(ActorInfo.ActorType.OWNER, readData(A, ActorInfo.ActorType.OWNER));
     return actorInfos;
   }
 
-  public static String constructMessage(
+  private static String constructMessage(
       TransactionLogInfo logInfo,
       ActorInfo ownerInfo,
       ActorInfo adminInfo,
@@ -137,7 +138,7 @@ public final class Utility {
     return sb.toString();
   }
 
-  public static void sendSMS(
+  static void sendSMS(
       TransactionLogInfo logInfo,
       ActorInfo ownerInfo,
       ActorInfo adminInfo,

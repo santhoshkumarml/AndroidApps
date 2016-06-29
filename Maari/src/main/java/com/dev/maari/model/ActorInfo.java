@@ -42,6 +42,9 @@ public class ActorInfo implements Serializable {
     return this.actorId;
   }
 
+  public void setActorId(String actorId) {
+    this.actorId = actorId;
+  }
   public String getName() {
     return name;
   }

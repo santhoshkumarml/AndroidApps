@@ -33,17 +33,15 @@ public class DAOManager extends OrmLiteSqliteOpenHelper{
   }
 
   @Override
-  public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int oldVersion,
-                        int newVersion) {
+  public void onUpgrade(
+      SQLiteDatabase sqLiteDatabase,
+      ConnectionSource connectionSource,
+      int oldVersion,
+      int newVersion
+  ) {
 //    NOOP
-
-//    try {
 //      TableUtils.dropTable(connectionSource, TransactionLogInfo.class, true);
 //      onCreate(sqLiteDatabase, connectionSource);
-//
-//    } catch (SQLException e) {
-//      Log.e(LOG_NAME, "Could not upgrade the table for Thing", e);
-//    }
   }
 
   public Dao<TransactionLogInfo, Long> getTransactionLogDao() throws SQLException {
