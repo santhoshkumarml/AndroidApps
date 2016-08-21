@@ -6,7 +6,7 @@ import com.dev.maari.app.AppStateManager;
 import com.dev.maari.exceptions.MaariException;
 import com.dev.maari.model.TransactionLogInfo;
 
-public class SmsSender implements Runnable {
+public final class SmsSender implements Runnable {
   private static final String LOG_TAG = SmsSender.class.getCanonicalName();
   private final PendingIntent si, di;
   private final AppStateManager appStateManager;

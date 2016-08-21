@@ -11,7 +11,7 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
-public class DAOManager extends OrmLiteSqliteOpenHelper{
+final class DAOManager extends OrmLiteSqliteOpenHelper{
   private static final String DATABASE_NAME = "maari.db";
   private static final int DATABASE_VERSION = 4;
   private static final String LOG_NAME = DAOManager.class.getCanonicalName();

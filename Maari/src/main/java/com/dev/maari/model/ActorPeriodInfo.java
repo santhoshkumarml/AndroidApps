@@ -1,7 +1,7 @@
 package com.dev.maari.model;
 
 public class ActorPeriodInfo extends ActorInfo {
-  Weekday weekday = Weekday.SUNDAY;
+  private Weekday weekday = Weekday.SUNDAY;
 
   public enum Weekday {
     MONDAY,

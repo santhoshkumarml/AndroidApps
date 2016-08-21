@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.sql.Time;
 
 @DatabaseTable(tableName = "AgentTransactionLog")
-public class TransactionLogInfo implements Serializable{
+public final class TransactionLogInfo implements Serializable{
   @DatabaseField(id = true, generatedId = true)
   long transactionLogId=0;
 

@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class AppStateManager {
+public final class AppStateManager {
   private static final String LOG_TAG = AppStateManager.class.getCanonicalName();
   private SmsSender smsSender;
   private ScheduledExecutorService ex;

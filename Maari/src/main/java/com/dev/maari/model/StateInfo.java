@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class StateInfo {
+public final class StateInfo {
   private final Map<ActorInfo.ActorType, Map<String, ActorInfo>> actorInfoMap;
   private final Map<ActorPeriodInfo.Weekday, Set<String>> weekdayToOwnerIdMap;
 
