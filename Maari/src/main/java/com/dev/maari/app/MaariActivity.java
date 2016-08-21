@@ -9,7 +9,7 @@ import com.dev.maari.exceptions.MaariException;
  * @author Santhosh Kumar
  */
 public class MaariActivity extends Activity {
-  AppStateManager appStateManager;
+  private AppStateManager appStateManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

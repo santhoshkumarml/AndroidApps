@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class StateInfo {
-  private Map<ActorInfo.ActorType, Map<String, ActorInfo>> actorInfoMap;
-  private Map<ActorPeriodInfo.Weekday, Set<String>> weekdayToOwnerIdMap;
+  private final Map<ActorInfo.ActorType, Map<String, ActorInfo>> actorInfoMap;
+  private final Map<ActorPeriodInfo.Weekday, Set<String>> weekdayToOwnerIdMap;
 
-  public void StateInfo() throws MaariException {
+  public StateInfo() throws MaariException {
     actorInfoMap = Utility.initializeAndReadData();
     weekdayToOwnerIdMap = new HashMap<ActorPeriodInfo.Weekday, Set<String>>();
     for (ActorInfo actorInfo : actorInfoMap.get(ActorInfo.ActorType.OWNER).values()) {

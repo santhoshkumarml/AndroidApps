@@ -41,7 +41,7 @@ public class AppStateManager {
     return stateInfo;
   }
 
-  public void offerToTransactionLogQueue(TransactionLogInfo logInfo) throws MaariException {
+  public synchronized void offerToTransactionLogQueue(TransactionLogInfo logInfo) throws MaariException {
     try {
       transactionLogDao.create(logInfo);
     } catch (SQLException e) {
@@ -49,11 +49,11 @@ public class AppStateManager {
     }
   }
 
-  public void pollTransactionLogInfoAndDoAction(TransactionLogInfoPollingHandler handler) throws MaariException {
+  public synchronized void pollTransactionLogInfoAndDoAction(TransactionLogInfoPollingHandler handler) throws MaariException {
     TransactionLogInfo transactionLogInfo = null;
     boolean isActionSuccess = false;
+    Iterator<TransactionLogInfo> transactionLogInfoIterator = transactionLogDao.iterator();
     try {
-      Iterator<TransactionLogInfo> transactionLogInfoIterator = transactionLogDao.iterator();
       if (transactionLogInfoIterator.hasNext()) {
         transactionLogInfo = transactionLogInfoIterator.next();
         isActionSuccess  = handler.handleTransactionLogPollingAction(transactionLogInfo);
@@ -61,7 +61,7 @@ public class AppStateManager {
     } catch (Exception e) {
       throw new MaariException(e);
     } finally {
-      if (transactionLogInfo != null && isActionSuccess) {
+      if (isActionSuccess) {
         try {
           transactionLogDao.delete(Collections.singletonList(transactionLogInfo));
         } catch (SQLException e) {

@@ -27,7 +27,7 @@ public class DAOManager extends OrmLiteSqliteOpenHelper{
     try {
       TableUtils.createTableIfNotExists(connectionSource, TransactionLogInfo.class);
     } catch (SQLException e) {
-      Log.e(LOG_NAME, "Could not create new table for Thing", e);
+      Log.e(LOG_NAME, "Could not create new table for TransactionLogInfo", e);
       throw new RuntimeException(e.getMessage());
     }
   }

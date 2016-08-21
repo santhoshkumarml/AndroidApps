@@ -38,7 +38,6 @@ public class SmsSender implements Runnable {
                 si,
                 di
             );
-            //TODO: based on SMS sending result.
             return true;
           }
         });
