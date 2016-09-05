@@ -49,7 +49,7 @@ public final class Utility {
         }
         Map<String, ActorInfo> innerMap = actorInfos.get(actorInfo.getActorType());
         if (innerMap == null) {
-          innerMap = new HashMap<String, ActorInfo>();
+          innerMap = new HashMap<>();
         }
         innerMap.put(actorInfo.getActorId(), actorInfo);
         actorInfos.put(actorInfo.getActorType(), innerMap);
