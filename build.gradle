@@ -22,19 +22,6 @@ allprojects {
     task doLast { task -> println "Building $task.project.name" }
 }
 
-subprojects {
-    apply plugin: 'com.android.application'
-
-    android {
-        compileSdkVersion 23
-        buildToolsVersion "23.0.3"
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_7
-            targetCompatibility JavaVersion.VERSION_1_7
-        }
-    }
-}
-
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
