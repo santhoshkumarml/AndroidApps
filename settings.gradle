@@ -1,1 +1,1 @@
-include 'Alarm', 'ExpenseManager', 'RouterFinder', 'SMSBackupRestore', 'RideCheap', 'Maari'
+include 'Alarm', 'ExpenseManager', 'RouterFinder', 'SMSBackupRestore', 'RideCheap'

@@ -1,6 +1,14 @@
+apply plugin: 'com.android.application'
+
 android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
     defaultConfig {
-        applicationId "com.dev.maari.app"
+        applicationId "com.dev.ridecheap.app"
         minSdkVersion 23
         targetSdkVersion 23
         versionCode 1
