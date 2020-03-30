@@ -1,10 +1,12 @@
 package com.dev.alarm.app;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,7 +20,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
 
-public class NotificationService extends Service{
+public class NotificationService extends Service {
 
     //common members
     private static final Logger LOGGER = Logger.getLogger(NotificationService.class.getCanonicalName());
@@ -28,7 +30,7 @@ public class NotificationService extends Service{
     //notification members
     private NotificationManager nm;
     private Timer timer = new Timer();
-    private TimerTask  task = null;
+    private TimerTask task = null;
     private static int notificationId = 0;
 
     //location update members
@@ -36,7 +38,6 @@ public class NotificationService extends Service{
     private String provider = null;
     private LocationListener listener = new LocationListenerImpl();
     private volatile Location currentLocation = null;
-
 
 
     @Override
@@ -48,10 +49,10 @@ public class NotificationService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
-        nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        lm = (LocationManager)getSystemService(LOCATION_SERVICE);
+        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        lm = (LocationManager) getSystemService(LOCATION_SERVICE);
         startLocationUpdates();
-        Toast.makeText(this,"Service created at " + time.getTime(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Service created at " + time.getTime(), Toast.LENGTH_LONG).show();
         // In this sample, we'll use the same text for the ticker and the expanded notification
         CharSequence text = getText(R.string.service_started);
         showNotification(text);
@@ -75,14 +76,13 @@ public class NotificationService extends Service{
      */
     private void showNotification(CharSequence text) {
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, AlarmActivity.class), 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, AlarmActivity.class), 0);
 
-    	Notification.Builder builder = new Notification.Builder(this);
+        Notification.Builder builder = new Notification.Builder(this);
 
         builder.setAutoCancel(false);
-//        builder.setTicker("this is ticker text");
-        builder.setContentTitle("Notification");               
+        //        builder.setTicker("this is ticker text");
+        builder.setContentTitle("Notification");
         builder.setContentText(text);
         builder.setSmallIcon(R.drawable.ic_stat_name);
         builder.setContentIntent(contentIntent);
@@ -94,20 +94,20 @@ public class NotificationService extends Service{
         Notification notication = builder.getNotification();
         this.nm.notify(++notificationId, notication);
         // Set the icon, scrolling text and timestamp
-//        Notification notification = new Notification(R.drawable.ic_stat_name, text,
-//                System.currentTimeMillis());
+        //        Notification notification = new Notification(R.drawable.ic_stat_name, text,
+        //                System.currentTimeMillis());
 
         // The PendingIntent to launch our activity if the user selects this notification
-//        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-//                new Intent(this, AlarmActivity.class), 0);
+        //        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+        //                new Intent(this, AlarmActivity.class), 0);
 
         // Set the info for the views that show in the notification panel.
-//        notification.setLatestEventInfo(this, getText(R.string.service_label),
-//                text, contentIntent);
+        //        notification.setLatestEventInfo(this, getText(R.string.service_label),
+        //                text, contentIntent);
 
         // Send the notification.
         // We use a layout id because it is a unique number.  We use it later to cancel.
-//        nm.notify(R.string.service_started, notification);
+        //        nm.notify(R.string.service_started, notification);
     }
 
     private void startLocationUpdates() {
@@ -115,8 +115,19 @@ public class NotificationService extends Service{
             Criteria criteria = new Criteria();
             criteria.setAccuracy(Criteria.NO_REQUIREMENT);
             provider = lm.getBestProvider(criteria, true);
-            if(provider == null) {
+            if (provider == null) {
                 LOGGER.info(" no location provider");
+            }
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    Activity#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for Activity#requestPermissions for more details.
+                return;
             }
             lm.requestLocationUpdates(provider, 5000L, -1, listener);
         }
